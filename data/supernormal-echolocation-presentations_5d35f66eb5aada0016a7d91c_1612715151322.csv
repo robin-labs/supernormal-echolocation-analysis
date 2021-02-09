@@ -1,0 +1,5 @@
+"trial_type","trial_index","time_elapsed","internal_node_id","prolificPid","studyId","sessionId","userAgent","version","rt","stimulus","key_press","chosenKeyset"
+"pavlovia","0","6","0.0-0.0","5d35f66eb5aada0016a7d91c","5fef55e628823a0076ec12ee","60200e1970a2325b612a7504","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0","v1-up-stims","","","",""
+"html-keyboard-response","1","4157","0.0-1.0","5d35f66eb5aada0016a7d91c","5fef55e628823a0076ec12ee","60200e1970a2325b612a7504","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0","v1-up-stims","4150","<div><h1>Welcome!</h1><p>Press any key to continue.</p></div>","32",""
+"consent-form","2","15847","0.0-2.0","5d35f66eb5aada0016a7d91c","5fef55e628823a0076ec12ee","60200e1970a2325b612a7504","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0","v1-up-stims","","","",""
+"keyset-select","3","84596","0.0-3.0","5d35f66eb5aada0016a7d91c","5fef55e628823a0076ec12ee","60200e1970a2325b612a7504","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0","v1-up-stims","","","","left-hand"
