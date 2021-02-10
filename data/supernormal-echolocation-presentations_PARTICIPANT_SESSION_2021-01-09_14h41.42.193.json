@@ -1,0 +1,4 @@
+"trial_type","trial_index","time_elapsed","internal_node_id","rt","stimulus","key_press","chosenKeyset"
+"pavlovia","0","5","0.0-0.0","","","",""
+"html-keyboard-response","1","883","0.0-1.0","877","<div><h1>Welcome!</h1><p>Beep bloop bloop. Press any key to continue.</p></div>","32",""
+"keyset-select","2","3262","0.0-2.0","","","","Left hand (home row)"
