@@ -29,9 +29,9 @@ for part in participants:
     print_distribution(part.error_distribution)
 
 print("\nTOTAL:")
-total_distribution = merge_distributions(part.error_distribution for part in left_blocks)
+total_distribution = merge_distributions(part.error_distribution for part in right_blocks)
 print_distribution(total_distribution)
-# plt.bar(total_distribution.keys(), total_distribution.values())
+plt.bar(total_distribution.keys(), total_distribution.values())
 
 print("\n======\n")
 
@@ -41,4 +41,4 @@ for (label, blocks) in [("left", left_blocks), ("right", right_blocks), ("front"
     print(f"{label} avg error:", round(sum(errs) / len(errs), 2))
     print(f"{label} percent correct:", round(sum(fracs) / len(fracs), 2))
 
-# plt.show()
+plt.show()

@@ -66,8 +66,10 @@ class Block:
 
 @dataclass
 class Participant:
+    prolific_pid: str
     version: str
     user_agent: str
+    keyset: str
     compensation: int
     slowdown: int
     blocks: List[Block]
