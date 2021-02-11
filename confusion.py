@@ -5,7 +5,6 @@ import numpy as np
 from models import Response
 
 
-
 class ConfusionMatrix:
     def __init__(self, matrix: np.ndarray, labels=None):
         assert matrix.shape[0] == matrix.shape[1]

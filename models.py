@@ -71,6 +71,7 @@ class Participant:
     user_agent: str
     keyset: str
     compensation: int
+    compensation_descriptor: str
     slowdown: int
     blocks: List[Block]
 
@@ -108,3 +109,10 @@ class Participant:
     @property
     def error_distribution(self):
         return merge_distributions([block.error_distribution for block in self._get_blocks()])
+
+
+class ParticipantException(Exception):
+    def __init__(self, prolific_pid, reason):
+        self.prolific_pid = prolific_pid
+        self.reason = reason
+        self.message = f"[{prolific_pid}] {reason}"

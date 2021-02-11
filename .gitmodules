@@ -1,0 +1,3 @@
+[submodule "supernormal-echolocation-presentations"]
+	path = supernormal-echolocation-presentations
+	url = git@gitlab.pavlovia.org:tenglab/supernormal-echolocation-presentations.git
