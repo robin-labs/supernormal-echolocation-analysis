@@ -2,7 +2,7 @@ from typing import List, Tuple
 from statistics import NormalDist
 import numpy as np
 
-from models import Response
+from models import Response, Participant
 
 
 class ConfusionMatrix:
@@ -17,11 +17,15 @@ class ConfusionMatrix:
         return np.nan_to_num(self.totals / self.totals.sum(axis=axis, keepdims=1), 0)
 
     @property
-    def false_alarms(self):
+    def denom(self):
+        return np.nan_to_num(self.totals.sum(axis=0, keepdims=1), 0)
+
+    @property
+    def reported_values_sum_to_unity(self):
         return self._normalize(0)
 
     @property
-    def normalized(self):
+    def true_values_sum_to_unity(self):
         return self._normalize(1)
 
     @property
@@ -72,3 +76,11 @@ class ConfusionMatrix:
         return ConfusionMatrix.from_true_reported_pairs(
             [(r.true_index, r.response_index) for r in responses]
         )
+
+    @staticmethod
+    def of_participants(participants: List[Participant]):
+        mats = [
+            ConfusionMatrix.of_azimuths(participant.get_responses()).normalized
+            for participant in participants
+        ]
+        return np.mean(mats)

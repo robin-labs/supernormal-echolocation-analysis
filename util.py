@@ -1,3 +1,4 @@
+from functools import reduce
 from typing import List, Dict
 
 
@@ -44,3 +45,7 @@ def resolve_compensation_value(slowdown, compensation_descriptor):
     elif compensation_descriptor == "half":
         return slowdown // 2
     return int(compensation_descriptor)
+
+
+def mean_of_matrices(mats):
+    return reduce(lambda a, b: a + b, mats) / len(mats)
