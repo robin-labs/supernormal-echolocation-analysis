@@ -9,6 +9,7 @@ verify_ssl = true
 numpy = "*"
 matplotlib = "*"
 scipy = "*"
+jupyter = "*"
 
 [requires]
 python_version = "3.8"

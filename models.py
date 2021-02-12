@@ -1,13 +1,15 @@
 from dataclasses import dataclass
 from typing import List
+from functools import cached_property
 
-from util import merge_distributions
+from util import merge_distributions, flag_block
 
 
 @dataclass
 class Response:
     true_azimuth: int
     response_azimuth: int
+    filename: str
     azimuth_choices: List[int]
     response_delay_ms: int
 
@@ -36,6 +38,11 @@ class Block:
     @property
     def num_responses(self):
         return len(self.responses)
+
+    
+    @cached_property
+    def is_flagged(self):
+        return flag_block(self)
 
     @property
     def num_correct_responses(self):
@@ -69,6 +76,7 @@ class Participant:
     prolific_pid: str
     version: str
     user_agent: str
+    model_name: str
     keyset: str
     compensation: int
     compensation_descriptor: str
@@ -109,6 +117,11 @@ class Participant:
     @property
     def error_distribution(self):
         return merge_distributions([block.error_distribution for block in self._get_blocks()])
+    
+
+    @cached_property
+    def is_flagged(self):
+        return sum([int(b.is_flagged) for b in self.blocks]) > 0
 
 
 class ParticipantException(Exception):

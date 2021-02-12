@@ -21,6 +21,10 @@ class ConfusionMatrix:
         return self._normalize(0)
 
     @property
+    def normalized(self):
+        return self._normalize(1)
+
+    @property
     def size(self):
         return self._matrix.shape[0]
 
