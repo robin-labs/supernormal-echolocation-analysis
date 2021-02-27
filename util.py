@@ -36,7 +36,7 @@ def flag_block(block):
             running_resp_count = 1
         running_resp = azimuth
     max_running_resp_count = max(running_resp_count, max_running_resp_count)
-    return max_running_resp_count > 7
+    return max_running_resp_count > 10
 
 
 def resolve_compensation_value(slowdown, compensation_descriptor):

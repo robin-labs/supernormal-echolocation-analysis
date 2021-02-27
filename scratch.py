@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from confusion import ConfusionMatrix
-from sensitivity import get_interstim_sensitivities, log_fit_sensitivities
+from sensitivity import get_interstim_sensitivities_for_confusion_matrix, log_fit_sensitivities
 
 
 def parse_str_example_data(str_data):
@@ -55,7 +55,7 @@ for idx, cm in enumerate((cm_1, cm_2, cm_3)):
     color = colors[idx]
     marker = markers[idx]
     label = labels[idx]
-    s = get_interstim_sensitivities(cm)
+    s = get_interstim_sensitivities_for_confusion_matrix(cm)
     x, y = log_fit_sensitivities(s)
     plt.plot(x, y, color=color, label=f"{label} (log)")
     plt.plot(*zip(*s), color=color, marker=marker, linestyle="None", label=label)

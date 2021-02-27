@@ -1,4 +1,4 @@
-import itertools
+from statistics import mean, median, stdev
 from dataclasses import dataclass
 from typing import List, Dict
 
@@ -11,8 +11,13 @@ def dict_product(dict_of_vals_or_lists):
     values = [v if isinstance(v, list) else [v] for v in dict_of_vals_or_lists.values()]
     return list(dict(zip(dict_of_vals_or_lists, x)) for x in itertools.product(*values))
 
+
 def create_query(**kwargs):
-    query_args = {"version": "v1-up-stims", "model_name": "spherical", **kwargs}
+    query_args = {
+        "version": "v1-up-stims",
+        "model_name": "spherical",
+        **kwargs,
+    }
 
     if query_args.get("compensation") and query_args.get("compensation_descriptor"):
         raise Exception("Cannot query on both compensation and compensation_descriptor")
@@ -22,7 +27,11 @@ def create_query(**kwargs):
 
     def test(participant):
         for (key, value) in query_args.items():
-            if getattr(participant, key) != value:
+            attr_value = getattr(participant, key)
+            if isinstance(value, list):
+                if not attr_value in value:
+                    return False
+            elif attr_value != value:
                 return False
         return True
 
@@ -43,10 +52,10 @@ class Condition:
     def get(self):
         return self.participants
 
-    def get_participants_responses(self, kind=None):
+    def get_participants_responses(self, sector=None):
         res = []
         for part in self.participants:
-            responses = part.get_responses(kind)
+            responses = part.get_responses(sector)
             for resp in responses:
                 res.append(resp)
         return res
@@ -57,6 +66,27 @@ class Condition:
     def subsect(self, **kwargs):
         queries = dict_product(kwargs)
         return [self.query_participants(**query) for query in queries]
+
+    def age_breakdown(self):
+        ages = []
+        for participant in self.participants:
+            if participant.age:
+                ages.append(participant.age)
+        return {
+            "mean": mean(ages),
+            "min": min(ages),
+            "max": max(ages),
+            "median": median(ages),
+            "stdev": stdev(ages),
+        }
+
+    def sex_breakdown(self):
+        sexes = {}
+        for participant in self.participants:
+            if participant.sex:
+                current = sexes.setdefault(participant.sex, 0)
+                sexes[participant.sex] = current + 1
+        return sexes
 
     def label(self, *keys):
         label_parts = []

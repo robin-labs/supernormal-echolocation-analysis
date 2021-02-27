@@ -8,18 +8,41 @@ invalid_prolific_pids = [
     "5feb726715b59bbd3c904409",  # Wrote in to say semicolon was broken
     "5bc2e0ec4f3bfd00012e97b5",  # Obviously phoning it in
     "5e328fc0a7365325cc819dae",  # Repeat runs > 10 of same choice
+    "5febda8badaa09d0c281c8c4",  # Me
 ]
+
+
+def get_file_paths(parent_dir):
+    children = [path.join(parent_dir, child) for child in listdir(parent_dir)]
+    return [child for child in children if path.isfile(child) and child.endswith(".csv")]
 
 
 def get_data_file_paths():
     data_dir = path.normpath(
         path.join(__file__, "..", "supernormal-echolocation-presentations", "data")
     )
-    children = [path.join(data_dir, child) for child in listdir(data_dir)]
-    return [child for child in children if path.isfile(child) and child.endswith(".csv")]
+    return get_file_paths(data_dir)
 
 
-def get_participant_for_file(path):
+def get_participant_metadata_file_paths():
+    metadata_dir = path.normpath(path.join(__file__, "..", "participant-metadata"))
+    return get_file_paths(metadata_dir)
+
+
+def load_participant_metadata():
+    metadata_by_pid = {}
+    for path in get_participant_metadata_file_paths():
+        with open(path, "r") as file:
+            reader = DictReader(file)
+            for row in reader:
+                pid = row["participant_id"]
+                age = row["age"]
+                sex = row["Sex"]
+                metadata_by_pid[pid] = {"age": age, "sex": sex}
+    return metadata_by_pid
+
+
+def get_participant_for_file(path, metadata_by_pid):
     with open(path, "r") as data_file:
         reader = DictReader(data_file)
         blocks = []
@@ -70,9 +93,10 @@ def get_participant_for_file(path):
                         response_azimuth=int(response_azimuth),
                         azimuth_choices=choices,
                         response_delay_ms=int(response_delay),
-                        filename=filename
+                        filename=filename,
                     )
                     current_block_responses.append(response)
+        metadata = metadata_by_pid.get(prolific_pid)
         if (
             len(blocks) == 6
             and slowdown
@@ -91,15 +115,18 @@ def get_participant_for_file(path):
                 keyset=keyset,
                 prolific_pid=prolific_pid,
                 model_name=model_name,
+                sex=metadata["sex"],
+                age=(int(metadata["age"]) if metadata["age"] else None),
             )
     raise ParticipantException(prolific_pid, "missing-data")
 
 
 _participants = []
 _exceptions = []
+_metadata = load_participant_metadata()
 for file in get_data_file_paths():
     try:
-        participant = get_participant_for_file(file)
+        participant = get_participant_for_file(file, _metadata)
         _participants.append(participant)
     except ParticipantException as ex:
         _exceptions.append(ex)

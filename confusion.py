@@ -14,7 +14,8 @@ class ConfusionMatrix:
         self._labels = labels
 
     def _normalize(self, axis: int):
-        return np.nan_to_num(self.totals / self.totals.sum(axis=axis, keepdims=1), 0)
+        with np.errstate(divide="ignore", invalid="ignore"):
+            return np.nan_to_num(self.totals / self.totals.sum(axis=axis, keepdims=1), 0)
 
     @property
     def denom(self):
@@ -78,9 +79,9 @@ class ConfusionMatrix:
         )
 
     @staticmethod
-    def of_participants(participants: List[Participant]):
+    def of_participants(participants: List[Participant], sector=None):
         mats = [
-            ConfusionMatrix.of_azimuths(participant.get_responses()).normalized
+            ConfusionMatrix.of_azimuths(participant.get_responses(sector)).normalized
             for participant in participants
         ]
         return np.mean(mats)

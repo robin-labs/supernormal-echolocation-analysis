@@ -81,19 +81,21 @@ class Participant:
     compensation: int
     compensation_descriptor: str
     slowdown: int
+    sex: str
+    age: int
     blocks: List[Block]
 
-    def _get_blocks(self, kind=None):
-        if kind == "left":
+    def _get_blocks(self, sector=None):
+        if sector == "left":
             return [b for b in self.blocks if b.center_azimuth < 0]
-        elif kind == "right":
+        elif sector == "right":
             return [b for b in self.blocks if b.center_azimuth > 0]
-        elif kind == "center":
+        elif sector == "center":
             return [b for b in self.blocks if b.center_azimuth == 0]
         return self.blocks
 
-    def get_responses(self, kind=None):
-        blocks = self._get_blocks(kind)
+    def get_responses(self, sector=None):
+        blocks = self._get_blocks(sector)
         return [response for block in blocks for response in block.responses]
 
     @property
