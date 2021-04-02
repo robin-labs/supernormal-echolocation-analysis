@@ -12,33 +12,27 @@ InterstimSensitivities = List[Tuple[int, float]]
 inverse_cdf = np.vectorize(NormalDist().inv_cdf)
 
 
-def get_interstim_sensitivities_for_participants(
-    participants: Participant, sector=None, epsilon=0.001
-) -> InterstimSensitivities:
-    false_alarm_matrices_by_participant = [
-        ConfusionMatrix.of_indices(part.get_responses(sector)).reported_values_sum_to_unity
-        for part in participants
-    ]
-    false_alarms = mean_of_matrices(false_alarm_matrices_by_participant)
-    regularized_false_alarms = np.clip(false_alarms, epsilon, 1 - epsilon)
-    num_responses = regularized_false_alarms.shape[0]
-    hits = np.tile(regularized_false_alarms.diagonal(), (num_responses, 1))
-    d_prime = inverse_cdf(hits) - inverse_cdf(regularized_false_alarms)
-    distances = []
-    for i in range(num_responses):
-        for j in range(num_responses):
-            interstim_distance = abs(j - i)
-            if interstim_distance == 0:
-                continue
-            value = d_prime[i, j]
-            distances.append((interstim_distance, value))
-    return list(sorted(distances, key=lambda x: x[0]))
+def get_individual_interstim_sensitivities_for_participants(
+    participants: List[Participant],
+    sector=None,
+    epsilon=0.001,
+):
+    all_sensitivities = []
+    for part in participants:
+        confusion_matrix = ConfusionMatrix.of_indices(part.get_responses(sector=sector))
+        participant_sensitivities = get_interstim_sensitivities_for_confusion_matrix(
+            confusion_matrix,
+            epsilon,
+        )
+        all_sensitivities += participant_sensitivities
+    return all_sensitivities
 
 
 def get_interstim_sensitivities_for_confusion_matrix(
-    cm: ConfusionMatrix, epsilon=0.001
+    cm: ConfusionMatrix,
+    epsilon=0.001,
 ) -> InterstimSensitivities:
-    false_alarms = cm.reported_values_sum_to_unity
+    false_alarms = cm.true_values_sum_to_unity
     regularized_false_alarms = np.clip(false_alarms, epsilon, 1 - epsilon)
     num_responses = regularized_false_alarms.shape[0]
     hits = np.tile(regularized_false_alarms.diagonal(), (num_responses, 1))

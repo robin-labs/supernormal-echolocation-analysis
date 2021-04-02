@@ -39,7 +39,6 @@ class Block:
     def num_responses(self):
         return len(self.responses)
 
-    
     @cached_property
     def is_flagged(self):
         return flag_block(self)
@@ -98,6 +97,13 @@ class Participant:
         blocks = self._get_blocks(sector)
         return [response for block in blocks for response in block.responses]
 
+    @cached_property
+    def num_correct_responses(self):
+        correct = 0
+        for block in self._get_blocks():
+            correct += block.num_correct_responses
+        return correct
+
     @property
     def fraction_correct_responses(self):
         total = 0
@@ -119,11 +125,18 @@ class Participant:
     @property
     def error_distribution(self):
         return merge_distributions([block.error_distribution for block in self._get_blocks()])
-    
 
     @cached_property
     def is_flagged(self):
-        return sum([int(b.is_flagged) for b in self.blocks]) > 0
+        return any((b.is_flagged for b in self.blocks if b.center_azimuth == 0))
+
+    @cached_property
+    def reaches_32_threshold(self):
+        return self.num_correct_responses >= 32
+
+    @cached_property
+    def reaches_24_threshold(self):
+        return self.num_correct_responses >= 24
 
 
 class ParticipantException(Exception):

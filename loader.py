@@ -6,9 +6,12 @@ from study import Study
 
 invalid_prolific_pids = [
     "5feb726715b59bbd3c904409",  # Wrote in to say semicolon was broken
-    "5bc2e0ec4f3bfd00012e97b5",  # Obviously phoning it in
     "5e328fc0a7365325cc819dae",  # Repeat runs > 10 of same choice
     "5febda8badaa09d0c281c8c4",  # Me
+    "5f9195db475c94016b4a9750",  # Phoning it in...
+    # "5f3d8b0bd9a75c164958578a",
+    # "5bc623acd2bea100010c808e",
+    # "5bc2e0ec4f3bfd00012e97b5",
 ]
 
 

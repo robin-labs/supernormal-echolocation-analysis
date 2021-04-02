@@ -46,7 +46,8 @@ class Condition:
     def query_participants(self, **kwargs):
         query_args, test = create_query(**kwargs)
         return Condition(
-            participants=list(filter(test, self.participants)), values={**self.values, **query_args}
+            participants=list(filter(test, self.participants)),
+            values={**self.values, **query_args},
         )
 
     def get(self):

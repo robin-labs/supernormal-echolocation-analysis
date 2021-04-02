@@ -10,6 +10,10 @@ numpy = "*"
 matplotlib = "*"
 scipy = "*"
 jupyter = "*"
+statsmodels = "*"
+pandas = "*"
+pingouin = "*"
+seaborn = "*"
 
 [requires]
 python_version = "3.8"

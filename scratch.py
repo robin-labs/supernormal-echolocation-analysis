@@ -8,7 +8,7 @@ from sensitivity import get_interstim_sensitivities_for_confusion_matrix, log_fi
 def parse_str_example_data(str_data):
     return np.array(
         [[int(n_str) for n_str in row.split("\t")] for row in str_data.strip().splitlines()]
-    )
+    ).T
 
 
 cm_1 = ConfusionMatrix(
