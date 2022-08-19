@@ -132,6 +132,7 @@ for file in get_data_file_paths():
         participant = get_participant_for_file(file, _metadata)
         _participants.append(participant)
     except ParticipantException as ex:
+        print(ex)
         _exceptions.append(ex)
 
 echo_study = Study(_participants, _exceptions)
